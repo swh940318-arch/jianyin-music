@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>简音播放器</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#121212;color:#fff;font-family:system-ui}
+header{padding:20px;text-align:center;font-size:22px;font-weight:bold;background:#1f1f1f}
+#scanBtn{margin:16px;padding:12px 24px;border:none;border-radius:8px;background:#2563eb;color:#fff;font-size:16px}
+#list{margin:0 12px}
+.item{padding:14px;border-bottom:1px solid #2a2a2a}
+.item:active{background:#222}
+audio{width:100%;position:fixed;bottom:0;background:#1f1f1f;padding:10px}
+</style>
+</head>
+<body>
+<header>简音本地音乐</header>
+<div style="text-align:center">
+<button id="scanBtn">扫描本地歌曲</button>
+</div>
+<div id="list"></div>
+<audio id="player" controls>
+
+<script>
+const listEl = document.getElementById('list');
+const player = document.getElementById('player');
+document.getElementById('scanBtn').onclick = ()=>{
+    const raw = Android.scanMusic();
+    const arr = JSON.parse(raw);
+    listEl.innerHTML = '';
+    arr.forEach(item=>{
+        const div = document.createElement('div');
+        div.className = 'item';
+        div.innerText = item.name;
+        div.onclick = ()=>{
+            player.src = item.uri;
+            player.play();
+        }
+        listEl.appendChild(div);
+    })
+}
+</script>
+</body>
+</html>
